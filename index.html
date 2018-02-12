@@ -1,15 +1,107 @@
 <html>
 <head>
-<script src="js/angular.js"></script>
+    <!--Variables global on Purpose-->
+    <script type='text/javascript'>
+        var g = [];
+        g['consoleLog'] = [];
+    
+    </script>
+    
+    <!--AngularJS-->
+    <script src="js/angular.js"></script>
+    
+    <!--SVGjs-->
+    <script src="js/svg.js"></script>
+    
+    <!--jQuery and jQueryUI-->
+    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <style>
+        body {}
+        #console {width:400px;}
+        #console_log {display:block;width:400px;margin:1px;resize:vertical}
+        #console_input {width:400px;margin:1px;}
+    </style>
 </head>
 
 <body>
-<header>
-</header>
+    <header>
+        <title>Caddie Test</title>
+    </header>
 
-<main>
-</main>
+    <main>
+        <div id="console">
+            <input type='text' id="console_input" readonly>
+            <textarea id="console_log" readonly placeholder="This is your log" rows='3'></textarea>
+        </div>
+        <p id='myP'>.</p>
+    </main>
     
-</body>
+<script>
+    $(document).ready(function(){
+        
+        var log = g.consoleLog;
+        
+        document.addEventListener('keydown', function(event){
+            /*
+            48 - 57 numbers
+            65 - 90 letters
+            32      spacebar
+            187     equal sign
+            189     dash
+            191     forward slash / ç
+            190     period
+            188     comma
+            8       backspace / delete
+            */
+            key = event.key;
+            if ( event.keyCode >=48 && event.keyCode <=57 || event.keyCode ==186 ){ //numbers+ç
+                $('#console_input').val( $('#console_input').val()+key );            
+            }
+            else if ( event.keyCode >=65 && event.keyCode <=90 ){                   //letters
+                $('#console_input').val( $('#console_input').val()+key );            
+            }
+            else if ( event.keyCode == 8 ){                                         //backspace
+                $('#console_input').val( $('#console_input').val().slice(0,-1) );            
+            }
+            
+            $('#myP').html( event.key+' / '+event.keyCode );
+            
+            if( event.keyCode == 13 && $('#console_input').val()!= '' ){            //enter
+                writeLog( $('#console_input').val() );
+            }
+            //if( event.key = )
+            event.preventDefault();
+        })
+        
+        document.addEventListener('mousemove', function(event){
+            $('#myP').html( event.pageX+' / '+event.pageY );
+        })
+    });
+    
+    function evalLog(){
+        var log = g.consoleLog.reverse();
+        var console = $('#console_log');
+        
+        console.val('');
+        log.forEach( function(entry){
+            console.val( console.val()+entry );
+            if(entry != log[log.length-1]){
+                console.val( console.val()+'\n' );
+            }
+        });   
+    } 
+    
+    function writeLog(log_entry){
+        var log = g.consoleLog;
+        log.push(log_entry);
+        $('#console_input').val('');
+        evalLog();
+    }
 
+</script>
+
+</body>
 </html>
