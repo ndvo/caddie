@@ -23,14 +23,31 @@
         #console {width:400px;}
         #console_log {display:block;width:400px;margin:1px;resize:vertical}
         #console_input {width:400px;margin:1px;}
+        #main-menu .menu-list li.menu{
+          display: inline-block;
+        }
+        #main-menu .dropdown-menu{
+          display: none;
+        }
+        #main-menu li.menu:hover .dropdown-menu{
+          display: block;
+        }
     </style>
+      <title>Caddie Test</title>
 </head>
 
-<body>
+<body ng-app >
     <header>
-        <title>Caddie Test</title>
+      <h1>Caddie - Teste {{ filename }}
     </header>
-
+    <nav id="main-menu"
+      <ul class="menu-list">
+        <li class="menu">File
+          <ul class="dropdown-menu">
+            <li class="menu-item">Save as <input size="10" type="text" ng-model="filename" ></li>
+          </ul></li>
+      </ul>
+    </nav>
     <main>
         <div id="console">
             <input type='text' id="console_input" readonly>
@@ -43,6 +60,7 @@
     $(document).ready(function(){
         
         var log = g.consoleLog;
+        var input_active = false;
         
         document.addEventListener('keydown', function(event){
             /*
@@ -57,6 +75,10 @@
             8       backspace / delete
             */
             key = event.key;
+            if (input_active==true){
+              return;
+            }
+            console.log(input_active);
             if ( event.keyCode >=48 && event.keyCode <=57 || event.keyCode ==186 ){ //numbers+ç
                 $('#console_input').val( $('#console_input').val()+key );            
             }
@@ -100,6 +122,15 @@
         $('#console_input').val('');
         evalLog();
     }
+    
+    $("input").focusout(function(){
+      input_active = false;
+      console.log("Returnin control to console");
+    });
+    $("input").focusin(function(){
+      input_active = true;
+      console.log(input_active);
+    });
 
 </script>
 
